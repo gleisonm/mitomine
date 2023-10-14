@@ -49,6 +49,11 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { CREATE_FILE                 } from '../modules/local/createfile.nf'
+include { CREATE_FILE as POLISH_FILE                 } from '../modules/local/createfile.nf'
+include { NOVOPLASTY                  } from '../modules/local/novoplasty.nf'
+include { NOVOPLASTY as POLISH                      } from '../modules/local/novoplasty.nf'
+include { NOVOPLASTYSET               } from '../modules/local/novoplastyset.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,13 +71,48 @@ workflow MITOMINE {
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
+
     INPUT_CHECK (
         file(params.input)
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
-    // TODO: OPTIONAL, you can use nf-validation plugin to create an input channel from the samplesheet with Channel.fromSamplesheet("input")
-    // See the documentation https://nextflow-io.github.io/nf-validation/samplesheets/fromSamplesheet/
-    // ! There is currently no tooling to help you write a sample sheet schema
+    ch_reads = INPUT_CHECK.out.reads
+
+    NOVOPLASTYSET ()
+
+    CREATE_FILE (
+        ch_reads,
+        params.seed,
+        'first'
+    )
+
+    NOVOPLASTY (
+        CREATE_FILE.out.config,
+        ch_reads,
+        params.seed,
+        NOVOPLASTYSET.out.run
+    )
+    //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
+    ch_circularized = NOVOPLASTY.out.fasta
+
+    POLISH_FILE (
+        ch_reads,
+        ch_circularized,
+        'polish'
+    )
+
+    ch_reads.dump(tag: 'reads')
+    NOVOPLASTY.out.fasta.dump(tag: 'circ')
+    POLISH_FILE.out.config.dump(tag:'file')
+    NOVOPLASTYSET.out.run.dump(tag: 'run')
+
+    POLISH (
+        POLISH_FILE.out.config,
+        ch_reads,
+        NOVOPLASTY.out.fasta,
+        NOVOPLASTYSET.out.run
+    )
+    //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
 
     //
     // MODULE: Run FastQC
