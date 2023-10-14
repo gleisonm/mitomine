@@ -1,3 +1,2 @@
 sample,fastq_1,fastq_2
-SAMPLE_PAIRED_END,/path/to/fastq/files/AEG588A1_S1_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S1_L002_R2_001.fastq.gz
-SAMPLE_SINGLE_END,/path/to/fastq/files/AEG588A4_S4_L003_R1_001.fastq.gz,
+ERR10768196,/data/home/gleison.azevedo/IC/Projeto1-mitGenome/genome_assembly/raw/ERR10768196_Illumina_NovaSeq_6000_paired_end_sequencing_1.fastq.gz,/data/home/gleison.azevedo/IC/Projeto1-mitGenome/genome_assembly/raw/ERR10768196_Illumina_NovaSeq_6000_paired_end_sequencing_2.fastq.gz
