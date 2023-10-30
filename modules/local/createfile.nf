@@ -38,12 +38,12 @@ Chloroplast sequence  =
 Dataset 1:
 -----------------------
 Read Length           = 151
-Insert size           = 300
+Insert size           = 525
 Platform              = illumina
 Single/Paired         = PE
 Combined reads        =
-Forward reads         = ${reads[0]}
-Reverse reads         = ${reads[1]}
+Forward reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[0]}
+Reverse reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[1]}
 Store Hash            =
 
 Heteroplasmy:

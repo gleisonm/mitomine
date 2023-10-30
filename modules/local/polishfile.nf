@@ -5,6 +5,7 @@ process POLISH_FILE {
     input:
     tuple val(meta), path(reads)
     tuple val(meta), path(seed)
+    val(run)
 
     output:
     path("config.txt")            , emit: config
@@ -21,7 +22,7 @@ process POLISH_FILE {
 echo "
 Project:
 -----------------------
-Project name          = $prefix
+Project name          = ${prefix}_${run}
 Type                  = mito
 Genome Range          = 13000-18000
 K-mer                 = 33
@@ -37,12 +38,12 @@ Chloroplast sequence  =
 Dataset 1:
 -----------------------
 Read Length           = 151
-Insert size           = 300
+Insert size           = 525
 Platform              = illumina
 Single/Paired         = PE
 Combined reads        =
-Forward reads         = ${reads[0]}
-Reverse reads         = ${reads[1]}
+Forward reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[0]}
+Reverse reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[1]}
 Store Hash            =
 
 Heteroplasmy:

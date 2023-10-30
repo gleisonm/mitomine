@@ -50,9 +50,9 @@ include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { CREATE_FILE                 } from '../modules/local/createfile.nf'
-include { CREATE_FILE as POLISH_FILE                 } from '../modules/local/createfile.nf'
+include { POLISH_FILE                 } from '../modules/local/polishfile.nf'
 include { NOVOPLASTY                  } from '../modules/local/novoplasty.nf'
-include { NOVOPLASTY as POLISH                      } from '../modules/local/novoplasty.nf'
+include { POLISH                      } from '../modules/local/novoplastypolish.nf'
 include { NOVOPLASTYSET               } from '../modules/local/novoplastyset.nf'
 
 /*
@@ -78,7 +78,8 @@ workflow MITOMINE {
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
     ch_reads = INPUT_CHECK.out.reads
 
-    NOVOPLASTYSET ()
+    
+    //ch_np_pl = file(params.np_pl)
 
     CREATE_FILE (
         ch_reads,
@@ -90,41 +91,40 @@ workflow MITOMINE {
         CREATE_FILE.out.config,
         ch_reads,
         params.seed,
-        NOVOPLASTYSET.out.run
+        params.np_pl
     )
     //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
-    ch_circularized = NOVOPLASTY.out.fasta
+    if (!NOVOPLASTY.out.fasta) { 
+        ch_polish = NOVOPLASTY.out.contigsfa
+    } else {
+        ch_polish = NOVOPLASTY.out.fasta
+    }
 
     POLISH_FILE (
         ch_reads,
-        ch_circularized,
+        ch_polish,
         'polish'
     )
-
-    ch_reads.dump(tag: 'reads')
-    NOVOPLASTY.out.fasta.dump(tag: 'circ')
-    POLISH_FILE.out.config.dump(tag:'file')
-    NOVOPLASTYSET.out.run.dump(tag: 'run')
 
     POLISH (
         POLISH_FILE.out.config,
         ch_reads,
-        NOVOPLASTY.out.fasta,
-        NOVOPLASTYSET.out.run
+        ch_polish,
+        params.np_pl
     )
     //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
 
     //
     // MODULE: Run FastQC
     //
-    FASTQC (
-        INPUT_CHECK.out.reads
-    )
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    //FASTQC (
+    //    INPUT_CHECK.out.reads
+    //)
+    //ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
-    CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
-    )
+    //CUSTOM_DUMPSOFTWAREVERSIONS (
+     //   ch_versions.unique().collectFile(name: 'collated_versions.yml')
+    //)
 
     //
     // MODULE: MultiQC
@@ -135,19 +135,19 @@ workflow MITOMINE {
     methods_description    = WorkflowMitomine.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description, params)
     ch_methods_description = Channel.value(methods_description)
 
-    ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    //ch_multiqc_files = Channel.empty()
+    //ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    //ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
+    //ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
+    //ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
 
-    MULTIQC (
-        ch_multiqc_files.collect(),
-        ch_multiqc_config.toList(),
-        ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList()
-    )
-    multiqc_report = MULTIQC.out.report.toList()
+   // MULTIQC (
+    //    ch_multiqc_files.collect(),
+    //    ch_multiqc_config.toList(),
+    //    ch_multiqc_custom_config.toList(),
+    //    ch_multiqc_logo.toList()
+    //)
+   // multiqc_report = MULTIQC.out.report.toList()
 }
 
 /*
