@@ -1,4 +1,5 @@
 process POLISH {
+    tag "$meta.id"
     label 'process_high'
 
     conda "conda-forge/packages/perl"
@@ -14,14 +15,16 @@ process POLISH {
 
     input:
     path(file)
-    tuple val(meta), path(reads)
+    tuple val(meta), path(fastq1)
+    tuple val(meta), path(fastq2)
     tuple val(meta), path(seed)
-    path(run)
+    path run
 
     output:
-    tuple val(meta), path("Circularized*.fasta")   , emit: fasta
-    tuple val(meta), path("contigs*.txt")          , emit: contigs
-    tuple val(meta), path("log*.txt")              , emit: log
+    tuple val(meta), path('Circularized*.fa*'),               optional: true        , emit: fasta
+    tuple val(meta), path('contigs*.txt')                          , emit: contigs
+    tuple val(meta), path('Contigs*.fasta'), optional: true        , emit: contigsfa
+    tuple val(meta), path('log*.txt')                              , emit: log
 
 
     //path "versions.yml"                            , emit: versions
@@ -33,7 +36,7 @@ process POLISH {
     def args = task.ext.args ?: ''
 
     """
-    perl ${run} -c ${file}
+    perl $run -c $file
 
     """
 }

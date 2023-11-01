@@ -1,4 +1,5 @@
 process NOVOPLASTY {
+    tag "$meta.id"
     label 'process_high'
 
     conda "conda-forge/packages/perl"
@@ -14,14 +15,20 @@ process NOVOPLASTY {
 
     input:
     path(file)
-    tuple val(meta), path(reads)
+    tuple val(meta), path(fastq1)
+    tuple val(meta), path(fastq2)
     path(seed)
-    path(run)
+    path run
 
     output:
-    path('Circularized*.fa*'), optional: true      , emit: fasta
-    tuple val(meta), path('contigs*.txt')          , emit: contigs
-    tuple val(meta), path('log*.txt')              , emit: log
+
+    //tuple val(meta), path('Circularized*.fa*'), optional: true        , emit: fasta
+    tuple val(meta), path('contigs*.txt')                             , emit: tmp
+    tuple val(meta), path('*.fasta')                                  , emit: contigs
+    tuple val(meta), path('log*.txt')                                 , emit: log
+    tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1
+    tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2
+
 
 
     //path "versions.yml"                            , emit: versions
@@ -33,7 +40,7 @@ process NOVOPLASTY {
     def args = task.ext.args ?: ''
 
     """
-    perl ${run} -c ${file}
+    perl $run -c $file
 
     """
 }
