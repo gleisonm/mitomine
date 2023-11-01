@@ -15,15 +15,20 @@ process NOVOPLASTY {
 
     input:
     path(file)
-    tuple val(meta), path(reads)
+    tuple val(meta), path(fastq1)
+    tuple val(meta), path(fastq2)
     path(seed)
     path run
 
     output:
-    tuple val(meta), path('Circularized*.fa*'),               optional: true        , emit: fasta
-    tuple val(meta), path('contigs*.txt')                          , emit: contigs
-    tuple val(meta), path('Contigs*.fasta'), optional: true        , emit: contigsfa
-    tuple val(meta), path('log*.txt')                              , emit: log
+
+    //tuple val(meta), path('Circularized*.fa*'), optional: true        , emit: fasta
+    tuple val(meta), path('contigs*.txt')                             , emit: tmp
+    tuple val(meta), path('*.fasta')                                  , emit: contigs
+    tuple val(meta), path('log*.txt')                                 , emit: log
+    tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1
+    tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2
+
 
 
     //path "versions.yml"                            , emit: versions

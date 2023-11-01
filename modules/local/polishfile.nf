@@ -3,9 +3,10 @@ process POLISH_FILE {
     label 'process_single'
 
     input:
-    tuple val(meta), path(reads)
+    tuple val(meta), path(fastq1)
+    tuple val(meta), path(fastq2)
     tuple val(meta), path(seed)
-    val(run)
+    
 
     output:
     path("config.txt")            , emit: config
@@ -22,7 +23,7 @@ process POLISH_FILE {
 echo "
 Project:
 -----------------------
-Project name          = ${prefix}_${run}
+Project name          = ${prefix}_polish
 Type                  = mito
 Genome Range          = 13000-18000
 K-mer                 = 33
@@ -42,8 +43,8 @@ Insert size           = 525
 Platform              = illumina
 Single/Paired         = PE
 Combined reads        =
-Forward reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[0]}
-Reverse reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[1]}
+Forward reads         = /data/home/gleison.azevedo/ciclideos/data/raw/$fastq1
+Reverse reads         = /data/home/gleison.azevedo/ciclideos/data/raw/$fastq2
 Store Hash            =
 
 Heteroplasmy:

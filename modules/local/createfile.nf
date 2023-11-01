@@ -8,7 +8,9 @@ process CREATE_FILE {
     val(run)
 
     output:
-    path("config.txt")            , emit: config
+    path("config.txt")                                                , emit: config
+    tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1
+    tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2
 
     when:
     task.ext.when == null || task.ext.when

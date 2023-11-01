@@ -15,7 +15,8 @@ process POLISH {
 
     input:
     path(file)
-    tuple val(meta), path(reads)
+    tuple val(meta), path(fastq1)
+    tuple val(meta), path(fastq2)
     tuple val(meta), path(seed)
     path run
 

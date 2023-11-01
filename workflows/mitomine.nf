@@ -49,11 +49,12 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { CREATE_FILE                 } from '../modules/local/createfile.nf'
-include { POLISH_FILE                 } from '../modules/local/polishfile.nf'
-include { NOVOPLASTY                  } from '../modules/local/novoplasty.nf'
-include { POLISH                      } from '../modules/local/novoplastypolish.nf'
-include { NOVOPLASTYSET               } from '../modules/local/novoplastyset.nf'
+include { NOVOPLASTY                  } from '../subworkflows/local/novoplasty'
+// include { CREATE_FILE                 } from '../modules/local/createfile.nf'
+// include { POLISH_FILE                 } from '../modules/local/polishfile.nf'
+// include { NOVOPLASTY                  } from '../modules/local/novoplasty.nf'
+// include { POLISH                      } from '../modules/local/novoplastypolish.nf'
+// include { NOVOPLASTYSET               } from '../modules/local/novoplastyset.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,40 +79,41 @@ workflow MITOMINE {
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
     ch_reads = INPUT_CHECK.out.reads
 
-    
-    //ch_np_pl = file(params.np_pl)
-
-    CREATE_FILE (
-        ch_reads,
-        params.seed,
-        'first'
-    )
-
     NOVOPLASTY (
-        CREATE_FILE.out.config,
-        ch_reads,
-        params.seed,
-        params.np_pl
-    )
-    //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
-    if (!NOVOPLASTY.out.fasta) { 
-        ch_polish = NOVOPLASTY.out.contigsfa
-    } else {
-        ch_polish = NOVOPLASTY.out.fasta
-    }
-
-    POLISH_FILE (
-        ch_reads,
-        ch_polish,
-        'polish'
+        ch_reads
     )
 
-    POLISH (
-        POLISH_FILE.out.config,
-        ch_reads,
-        ch_polish,
-        params.np_pl
-    )
+    // CREATE_FILE (
+    //     ch_reads,
+    //     params.seed,
+    //     'first'
+    // )
+
+    // NOVOPLASTY (
+    //     CREATE_FILE.out.config,
+    //     ch_reads,
+    //     params.seed,
+    //     params.np_pl
+    // )
+    // //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
+    // if (!NOVOPLASTY.out.fasta) { 
+    //     ch_polish = NOVOPLASTY.out.contigsfa
+    // } else {
+    //     ch_polish = NOVOPLASTY.out.fasta
+    // }
+
+    // POLISH_FILE (
+    //     ch_reads,
+    //     ch_polish,
+    //     'polish'
+    // )
+
+    // POLISH (
+    //     POLISH_FILE.out.config,
+    //     ch_reads,
+    //     ch_polish,
+    //     params.np_pl
+    // )
     //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
 
     //
