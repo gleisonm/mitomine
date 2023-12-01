@@ -36,6 +36,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { NOVOPLASTY  } from '../subworkflows/local/novoplasty'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,12 +50,8 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { NOVOPLASTY                  } from '../subworkflows/local/novoplasty'
-// include { CREATE_FILE                 } from '../modules/local/createfile.nf'
-// include { POLISH_FILE                 } from '../modules/local/polishfile.nf'
-// include { NOVOPLASTY                  } from '../modules/local/novoplasty.nf'
-// include { POLISH                      } from '../modules/local/novoplastypolish.nf'
-// include { NOVOPLASTYSET               } from '../modules/local/novoplastyset.nf'
+include { UNICYCLER                   } from '../modules/nf-core/unicycler/main' 
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,54 +76,44 @@ workflow MITOMINE {
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
     ch_reads = INPUT_CHECK.out.reads
 
-    NOVOPLASTY (
-        ch_reads
+    //
+    // MODULE: ASSEMBLY:  DE NOVO mitogenome assembly
+    //
+
+    //NOVOPLASTY
+
+    //NOVOPLASTY (
+   //     ch_reads
+    //)
+
+    UNICYCLER (
+        ch_reads        
     )
 
-    // CREATE_FILE (
-    //     ch_reads,
-    //     params.seed,
-    //     'first'
-    // )
-
-    // NOVOPLASTY (
-    //     CREATE_FILE.out.config,
-    //     ch_reads,
-    //     params.seed,
-    //     params.np_pl
-    // )
-    // //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
-    // if (!NOVOPLASTY.out.fasta) { 
-    //     ch_polish = NOVOPLASTY.out.contigsfa
-    // } else {
-    //     ch_polish = NOVOPLASTY.out.fasta
-    // }
-
-    // POLISH_FILE (
-    //     ch_reads,
-    //     ch_polish,
-    //     'polish'
-    // )
-
-    // POLISH (
-    //     POLISH_FILE.out.config,
-    //     ch_reads,
-    //     ch_polish,
-    //     params.np_pl
-    // )
-    //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
 
     //
-    // MODULE: Run FastQC
+    // Tree
     //
-    //FASTQC (
-    //    INPUT_CHECK.out.reads
-    //)
-    //ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
-    //CUSTOM_DUMPSOFTWAREVERSIONS (
-     //   ch_versions.unique().collectFile(name: 'collated_versions.yml')
-    //)
+    //
+    // Annotation
+    //
+
+    //
+    // tRNAscan-SE and R2DT
+    //
+
+    //
+    // Relative synonymous codon usage RSCU
+    //
+
+    //
+    // Syteny and collinear
+    //
+
+    //
+    // D-loop Tandem repeats finder
+    //
 
     //
     // MODULE: MultiQC

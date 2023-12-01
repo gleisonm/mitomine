@@ -30,13 +30,6 @@ workflow NOVOPLASTY {
         params.seed,
         params.np_pl
     )
-    //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
-    // if (!NOVOPLASTY_RUN.out.fasta) { 
-    //     ch_polish = NOVOPLASTY_RUN.out.contigsfa
-    // } else {
-    //     ch_polish = NOVOPLASTY_RUN.out.fasta
-    // }
-
 
     POLISH_FILE (
         NOVOPLASTY_RUN.out.fastq1,
