@@ -9,6 +9,7 @@ include { POLISH_FILE                  } from '../../modules/local/polishfile.nf
 include { NOVOPLASTY as NOVOPLASTY_RUN } from '../../modules/local/novoplasty.nf'
 include { POLISH                       } from '../../modules/local/novoplastypolish.nf'
 include { NOVOPLASTYSET                } from '../../modules/local/novoplastyset.nf'
+include { MITOZ                        } from '../../modules/local/mitoz.nf'
 
 workflow ASSEMBLY {
 

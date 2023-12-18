@@ -38,7 +38,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 include { INPUT_CHECK     } from '../subworkflows/local/input_check'
 //include { NOVOPLASTY      } from '../subworkflows/local/novoplasty'
 include { ASSEMBLY        } from '../subworkflows/local/assembly'
-include { MITOZ_ASSEMBLER } from '../subworkflows/local/mitoz_assembler.nf'
+//include { MITOZ_ASSEMBLER } from '../subworkflows/local/mitoz_assembler.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
