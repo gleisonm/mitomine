@@ -35,8 +35,10 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
-include { NOVOPLASTY  } from '../subworkflows/local/novoplasty'
+include { INPUT_CHECK     } from '../subworkflows/local/input_check'
+//include { NOVOPLASTY      } from '../subworkflows/local/novoplasty'
+include { ASSEMBLY        } from '../subworkflows/local/assembly'
+include { MITOZ_ASSEMBLER } from '../subworkflows/local/mitoz_assembler.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,7 +52,9 @@ include { NOVOPLASTY  } from '../subworkflows/local/novoplasty'
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { UNICYCLER                   } from '../modules/nf-core/unicycler/main' 
+include { UNICYCLER                   } from '../modules/nf-core/unicycler/main'
+
+
 
 
 /*
@@ -77,19 +81,33 @@ workflow MITOMINE {
     ch_reads = INPUT_CHECK.out.reads
 
     //
-    // MODULE: ASSEMBLY:  DE NOVO mitogenome assembly
+    // MODULE: ASSEMBLY - DE NOVO mitogenome assembly
     //
 
-    //NOVOPLASTY
+    //NOVOPLASTY / MITOZ
 
     //NOVOPLASTY (
-   //     ch_reads
+    //    ch_reads
     //)
 
-    UNICYCLER (
-        ch_reads        
+    ASSEMBLY (
+        ch_reads
     )
 
+    //MITOZ
+
+    //MITOZ_ASSEMBLER (
+    //    ch_reads
+    //)
+
+    //GETORGANELE
+
+    //GETORGANELE (ch_reads)
+
+    //
+    // MODULE: Syteny and collinear
+    //
+    //pmauve/mmseqs/mummer/simpleplot
 
     //
     // Tree
@@ -105,10 +123,6 @@ workflow MITOMINE {
 
     //
     // Relative synonymous codon usage RSCU
-    //
-
-    //
-    // Syteny and collinear
     //
 
     //
