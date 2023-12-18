@@ -4,18 +4,22 @@
 //               https://nf-co.re/join
 // TODO nf-core: A subworkflow SHOULD import at least two modules
 
-include { CREATE_FILE                 } from '../../modules/local/createfile.nf'
-include { POLISH_FILE                 } from '../../modules/local/polishfile.nf'
-include { NOVOPLASTY as NOVOPLASTY_RUN              } from '../../modules/local/novoplasty.nf'
-include { POLISH                      } from '../../modules/local/novoplastypolish.nf'
-include { NOVOPLASTYSET               } from '../../modules/local/novoplastyset.nf'
+include { CREATE_FILE                  } from '../../modules/local/createfile.nf'
+include { POLISH_FILE                  } from '../../modules/local/polishfile.nf'
+include { NOVOPLASTY as NOVOPLASTY_RUN } from '../../modules/local/novoplasty.nf'
+include { POLISH                       } from '../../modules/local/novoplastypolish.nf'
+include { NOVOPLASTYSET                } from '../../modules/local/novoplastyset.nf'
 
-workflow NOVOPLASTY {
+workflow ASSEMBLY {
 
     take:
     ch_reads
 
     main:
+
+    //
+    // NOVOPlasty
+    //
 
     CREATE_FILE (
         ch_reads,
@@ -30,13 +34,6 @@ workflow NOVOPLASTY {
         params.seed,
         params.np_pl
     )
-    //ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
-    // if (!NOVOPLASTY_RUN.out.fasta) { 
-    //     ch_polish = NOVOPLASTY_RUN.out.contigsfa
-    // } else {
-    //     ch_polish = NOVOPLASTY_RUN.out.fasta
-    // }
-
 
     POLISH_FILE (
         NOVOPLASTY_RUN.out.fastq1,
@@ -47,11 +44,24 @@ workflow NOVOPLASTY {
     POLISH (
         POLISH_FILE.out.config,
         NOVOPLASTY_RUN.out.fastq1,
-        NOVOPLASTY_RUN.out.fastq2,        
+        NOVOPLASTY_RUN.out.fastq2,
         NOVOPLASTY_RUN.out.contigs,
         params.np_pl
     )
    // ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
+
+    //
+    // MitoZ
+    //
+
+    MITOZ (
+        //fasqt1
+        //fastq2
+        //clade
+        //genetic_code
+        //taxa
+        //activity
+    )
 
 }
 

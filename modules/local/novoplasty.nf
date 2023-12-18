@@ -3,9 +3,6 @@ process NOVOPLASTY {
     label 'process_high'
 
     conda "conda-forge/packages/perl"
-   // container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-   //     'https://depot.galaxyproject.org/singularity/novoplasty' :
-   //     'biocontainers/novoplasty' }"
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/perl' :
@@ -24,7 +21,7 @@ process NOVOPLASTY {
 
     //tuple val(meta), path('Circularized*.fa*'), optional: true        , emit: fasta
     tuple val(meta), path('contigs*.txt')                             , emit: tmp
-    tuple val(meta), path('*.fasta')                                  , emit: contigs
+    tuple val(meta), path('C*.fasta')                                 , emit: contigs
     tuple val(meta), path('log*.txt')                                 , emit: log
     tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1
     tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2
