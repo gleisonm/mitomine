@@ -1,20 +1,16 @@
-// TODO nf-core: If in doubt look at other nf-core/subworkflows to see how we are doing things! :)
-//               https://github.com/nf-core/modules/tree/master/subworkflows
-//               You can also ask for help via your pull request or on the #subworkflows channel on the nf-core Slack workspace:
-//               https://nf-co.re/join
-// TODO nf-core: A subworkflow SHOULD import at least two modules
-
+//Modules to ASSEMBLY subworkflow
 include { CREATE_FILE                  } from '../../modules/local/createfile.nf'
 include { POLISH_FILE                  } from '../../modules/local/polishfile.nf'
 include { NOVOPLASTY as NOVOPLASTY_RUN } from '../../modules/local/novoplasty.nf'
 include { POLISH                       } from '../../modules/local/novoplastypolish.nf'
 include { NOVOPLASTYSET                } from '../../modules/local/novoplastyset.nf'
 include { MITOZ                        } from '../../modules/local/mitoz.nf'
+include { ISCIRC                       } from '../../modules/local/iscirc.nf'
 
 workflow ASSEMBLY {
 
     take:
-    ch_reads
+    ch_reads // channel: [ val(meta), [ fasta ] ]
 
     main:
 
@@ -49,20 +45,30 @@ workflow ASSEMBLY {
         NOVOPLASTY_RUN.out.contigs,
         params.np_pl
     )
-   // ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
+
+    if (POLISH.out.fasta) {
+
+        ISCIRC (
+            POLISH.out.fasta
+        )
+
+    }
+    // ch_versions = ch_versions.mix(NOVOPLASTY.out.versions)
 
     //
     // MitoZ
     //
 
     MITOZ (
-        //fasqt1
-        //fastq2
-        //clade
-        //genetic_code
-        //taxa
-        //activity
+        ch_reads,
+        'Chordata', //params
+        '2',        //params
+        'Chordata', //params
+        '--all'     //params
     )
 
+    //
+    // GetOrganelle
+    //
 }
 

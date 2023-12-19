@@ -14,17 +14,17 @@ process POLISH {
 
 
     input:
-    path(file)
-    tuple val(meta), path(fastq1)
-    tuple val(meta), path(fastq2)
-    tuple val(meta), path(seed)
+    path(file)                      //Config file to run NOVOPlasty
+    tuple val(meta), path(fastq1)   //fastq_1
+    tuple val(meta), path(fastq2)   //fastq_2
+    tuple val(meta), path(seed)     //fasta from already assembled mitochondrion
     path run
 
     output:
-    tuple val(meta), path('Circularized*.fa*'),               optional: true        , emit: fasta
-    tuple val(meta), path('contigs*.txt')                          , emit: contigs
-    tuple val(meta), path('Contigs*.fasta'), optional: true        , emit: contigsfa
-    tuple val(meta), path('log*.txt')                              , emit: log
+    tuple val(meta), path('Circularized*.fa*'), optional: true     , emit: fasta        //Circularized fasta
+    tuple val(meta), path('contigs*.txt')                          , emit: contigs      //Contigs from incomplete circ
+    tuple val(meta), path('Contigs*.fasta'), optional: true        , emit: contigsfa    //Contigs Fasta from incomplete circ
+    tuple val(meta), path('log*.txt')                              , emit: log          //log
 
 
     //path "versions.yml"                            , emit: versions

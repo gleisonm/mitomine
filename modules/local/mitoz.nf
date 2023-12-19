@@ -18,7 +18,11 @@ process MITOZ {
         'biocontainers/mitoz:3.6--pyhdfd78af_1' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(reads)
+    val(clade)
+    val(code)
+    val(taxa)
+    val(activity)
 
     output:
 
@@ -38,8 +42,8 @@ mitoz $activity \\
 --clade Chordata \\
 --genetic_code 2 \\
 --species_name "$prefix" \\
---fq1 $fastq1 \\
---fq2 $fastq2 \\
+--fq1 ${reads[0]} \\
+--fq2 ${reads[1]} \\
 --fastq_read_length 151 \\
 --data_size_for_mt_assembly 3,0 \\
 --assembler megahit \\

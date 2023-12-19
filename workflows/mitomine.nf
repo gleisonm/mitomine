@@ -52,7 +52,6 @@ include { ASSEMBLY        } from '../subworkflows/local/assembly'
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { UNICYCLER                   } from '../modules/nf-core/unicycler/main'
 
 
 

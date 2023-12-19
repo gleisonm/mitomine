@@ -3,14 +3,14 @@ process CREATE_FILE {
     label 'process_single'
 
     input:
-    tuple val(meta), path(reads)
-    path(seed)
-    val(run)
+    tuple val(meta), path(reads) //Fasta from samplesheet
+    path(seed)                   //Already assembled mitochondrion
+    val(run)                     //Number of NOVOPlasty runs
 
     output:
-    path("config.txt")                                                , emit: config
-    tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1
-    tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2
+    path("config.txt")                                                , emit: config //Config file to run NOVOPlasty
+    tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1 //fasta_1
+    tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2 //fasta_2
 
     when:
     task.ext.when == null || task.ext.when
@@ -44,8 +44,8 @@ Insert size           = 525
 Platform              = illumina
 Single/Paired         = PE
 Combined reads        =
-Forward reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[0]}
-Reverse reads         = /data/home/gleison.azevedo/ciclideos/data/raw/${reads[1]}
+Forward reads         = ${reads[0]}
+Reverse reads         = ${reads[1]}
 Store Hash            =
 
 Heteroplasmy:
