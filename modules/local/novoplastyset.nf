@@ -2,9 +2,9 @@ process NOVOPLASTYSET {
     label 'process_single'
 
     output:
-    
+
     path "*.pl", emit: run
-   
+
    // path "versions.yml"           , emit: versions
 
     when:

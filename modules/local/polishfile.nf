@@ -6,7 +6,7 @@ process POLISH_FILE {
     tuple val(meta), path(fastq1)
     tuple val(meta), path(fastq2)
     tuple val(meta), path(seed)
-    
+
 
     output:
     path("config.txt")            , emit: config
@@ -16,6 +16,7 @@ process POLISH_FILE {
 
 
     script:
+    //def params = file(out.log.novoplasty).eachLine{ str -> printlc "line ${genomerange}: $str}
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
 
@@ -30,7 +31,7 @@ K-mer                 = 33
 Max memory            = 120
 Extended log          = 0
 Save assembled reads  = no
-Seed Input            = /data/home/gleison.azevedo/ciclideos/results/novoplasty/novoplasty_firstrun/$seed
+Seed Input            = $seed
 Extend seed directly  = no
 Reference sequence    =
 Variance detection    =
@@ -43,8 +44,8 @@ Insert size           = 525
 Platform              = illumina
 Single/Paired         = PE
 Combined reads        =
-Forward reads         = /data/home/gleison.azevedo/ciclideos/data/raw/$fastq1
-Reverse reads         = /data/home/gleison.azevedo/ciclideos/data/raw/$fastq2
+Forward reads         = $fastq1
+Reverse reads         = $fastq2
 Store Hash            =
 
 Heteroplasmy:

@@ -23,8 +23,8 @@ process NOVOPLASTY {
     tuple val(meta), path('contigs*.txt')                             , emit: tmp
     tuple val(meta), path('C*.fasta')                                 , emit: contigs
     tuple val(meta), path('log*.txt')                                 , emit: log
-    tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1
-    tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2
+    tuple val(meta), path('*_1.fa*', includeInputs:true)            , emit: fastq1
+    tuple val(meta), path('*_2.fa*', includeInputs:true)            , emit: fastq2
 
 
 
