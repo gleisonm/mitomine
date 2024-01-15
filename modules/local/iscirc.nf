@@ -2,9 +2,9 @@ process ISCIRC {
     tag "$meta.id"
     label 'process_single'
 
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/alpine':
-        'alpine' }"
+    //container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    //    'https://depot.galaxyproject.org/singularity/alpine:b31dd6ba7d28':
+    //    'alpine:b31dd6ba7d28' }"
 
     input:
     tuple val(meta), path(mitochondrion)

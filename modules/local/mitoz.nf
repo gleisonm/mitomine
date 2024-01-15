@@ -14,7 +14,7 @@ process MITOZ {
 
     conda "bioconda::mitoz=3.6"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mitoz:3.6--pyhdfd78af_0':
+        'quay.io/biocontainers/mitoz:3.6--pyhdfd78af_0':
         'biocontainers/mitoz:3.6--pyhdfd78af_1' }"
 
     input:
@@ -26,7 +26,7 @@ process MITOZ {
 
     output:
 
-
+    tuple val(meta), path('megahit', includeInputs:true), optional: true            , emit: assemble
 
     when:
     task.ext.when == null || task.ext.when
@@ -34,8 +34,10 @@ process MITOZ {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    //def mem = task.memory : '/\b(\d+)\b/[0][1]'
+    def mem = (task.memory =~ /\b(\d+)\b/)[0][1]
 
-    """
+/*    """
 mitoz $activity \\
 --outprefix $prefix \\
 --thread_number $task.cpus \\
@@ -47,8 +49,29 @@ mitoz $activity \\
 --fastq_read_length 151 \\
 --data_size_for_mt_assembly 3,0 \\
 --assembler megahit \\
---kmers_megahit 59 79 99 119 141 \\
---memory $task.memory \\
+--kmers_megahit 43 71 99 119 141 \\
+--memory $mem \\
+--requiring_taxa Chordata \\
+$args
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        : \$(echo \$(mitoz --version 2>&1) | sed 's/^.*mitoz //; s/Using.*\$//' ))
+    END_VERSIONS
+    """*/
+
+    """
+mitoz $activity \\
+--outprefix $prefix \\
+--thread_number $task.cpus \\
+--clade Chordata \\
+--genetic_code 2 \\
+--fq1 ${reads[0]} \\
+--fq2 ${reads[1]} \\
+--fastq_read_length 151 \\
+--assembler megahit \\
+--kmers_megahit 43 71 99 119 141 \\
+--memory $mem \\
 --requiring_taxa Chordata \\
 $args
 

@@ -9,8 +9,8 @@ process CREATE_FILE {
 
     output:
     path("config.txt")                                                , emit: config //Config file to run NOVOPlasty
-    tuple val(meta), path('*_1.fast*', includeInputs:true)            , emit: fastq1 //fasta_1
-    tuple val(meta), path('*_2.fast*', includeInputs:true)            , emit: fastq2 //fasta_2
+    tuple val(meta), path('*_1.fa*', includeInputs:true)            , emit: fastq1
+    tuple val(meta), path('*_2.fa*', includeInputs:true)            , emit: fastq2
 
     when:
     task.ext.when == null || task.ext.when

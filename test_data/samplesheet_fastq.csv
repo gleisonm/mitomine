@@ -1,0 +1,8 @@
+sample,fastq_1,fastq_2
+DRR228814,https://github.com/gleisonm/mtDNA_testdb/raw/main/fastq/test_1.fastq.gz,https://github.com/gleisonm/mtDNA_testdb/raw/main/fastq/test_2.fastq.gz
+ERR10789859,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789859_mtDNA_1.fastq,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789859_mtDNA_2.fastq
+ERR10789876,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789876_mtDNA_1.fastq,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789876_mtDNA_2.fastq
+ERR10789877,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789877_mtDNA_1.fastq,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789877_mtDNA_2.fastq
+ERR10789889,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789889_mtDNA_1.fastq,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789889_mtDNA_2.fastq
+ERR10789890,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789890_mtDNA_1.fastq,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789890_mtDNA_2.fastq
+ERR10789900,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789900_mtDNA_1.fastq,https://raw.githubusercontent.com/gleisonm/mtDNA_testdb/main/fastq/ERR10789900_mtDNA_2.fastq

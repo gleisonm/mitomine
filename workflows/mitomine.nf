@@ -111,6 +111,7 @@ workflow MITOMINE {
     //
     // Tree
     //
+    //iqtree
 
     //
     // Annotation
