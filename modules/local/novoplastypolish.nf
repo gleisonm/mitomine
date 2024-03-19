@@ -1,11 +1,9 @@
 process POLISH {
+    fair true
     tag "$meta.id"
     label 'process_high'
 
     conda "conda-forge/packages/perl"
-   // container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-   //     'https://depot.galaxyproject.org/singularity/novoplasty' :
-   //     'biocontainers/novoplasty' }"
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/perl' :
@@ -14,13 +12,15 @@ process POLISH {
 
 
     input:
-    path(file)                      //Config file to run NOVOPlasty
     tuple val(meta), path(fastq1)   //fastq_1
     tuple val(meta), path(fastq2)   //fastq_2
+    path(file)                      //Config file to run NOVOPlasty
     tuple val(meta), path(seed)     //fasta from already assembled mitochondrion
     path run
 
     output:
+    tuple val(meta), path('*_1.fa*', includeInputs:true)           , emit: fastq1
+    tuple val(meta), path('*_2.fa*', includeInputs:true)           , emit: fastq2
     tuple val(meta), path('Circularized*.fa*'), optional: true     , emit: fasta        //Circularized fasta
     tuple val(meta), path('contigs*.txt')                          , emit: contigs      //Contigs from incomplete circ
     tuple val(meta), path('Contigs*.fasta'), optional: true        , emit: contigsfa    //Contigs Fasta from incomplete circ

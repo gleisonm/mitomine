@@ -1,4 +1,5 @@
 process ISCIRC {
+    fair true
     tag "$meta.id"
     label 'process_single'
 

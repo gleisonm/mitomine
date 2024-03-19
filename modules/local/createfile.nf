@@ -1,4 +1,5 @@
 process CREATE_FILE {
+    fair true
     tag "$meta.id"
     label 'process_single'
 
@@ -9,8 +10,8 @@ process CREATE_FILE {
 
     output:
     path("config.txt")                                                , emit: config //Config file to run NOVOPlasty
-    tuple val(meta), path('*_1.fa*', includeInputs:true)            , emit: fastq1
-    tuple val(meta), path('*_2.fa*', includeInputs:true)            , emit: fastq2
+    tuple val(meta), path('*_1.fa*', includeInputs:true)              , emit: fastq1
+    tuple val(meta), path('*_2.fa*', includeInputs:true)              , emit: fastq2
 
     when:
     task.ext.when == null || task.ext.when
@@ -58,7 +59,7 @@ Optional:
 -----------------------
 Insert size auto      = yes
 Use Quality Scores    = no
-Reduce ambigious N's  =
+Reduce ambigious N's  = yes
 Output path           =
 " > config.txt
     """

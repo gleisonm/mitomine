@@ -1,4 +1,5 @@
 process NOVOPLASTY {
+    fair true
     tag "$meta.id"
     label 'process_high'
 
@@ -19,10 +20,10 @@ process NOVOPLASTY {
 
     output:
 
-    //tuple val(meta), path('Circularized*.fa*'), optional: true        , emit: fasta
-    tuple val(meta), path('contigs*.txt')                             , emit: tmp
-    tuple val(meta), path('C*.fasta')                                 , emit: contigs
-    tuple val(meta), path('log*.txt')                                 , emit: log
+    //tuple val(meta), path('Circularized*.fa*'), optional: true      , emit: fasta
+    tuple val(meta), path('contigs*.txt')                            , emit: tmp
+    tuple val(meta), path('C*.fasta')                                , emit: contigs
+    tuple val(meta), path('log*.txt')                                , emit: log
     tuple val(meta), path('*_1.fa*', includeInputs:true)            , emit: fastq1
     tuple val(meta), path('*_2.fa*', includeInputs:true)            , emit: fastq2
 

@@ -1,43 +1,40 @@
-process POLISH_FILE {
+process HETEROPLASMY_FILE {
     fair true
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
 
     input:
-    tuple val(meta), path(fastq1)
-    tuple val(meta), path(fastq2)
-    tuple val(meta), path(seed)
-
+    tuple val(meta), path(fastq1)   //fastq_1
+    tuple val(meta), path(fastq2)   //fastq_2
+    tuple val(meta), path(mtdna)
 
     output:
-    path("config.txt")            , emit: config
-    tuple val(meta), path('C*.fasta', includeInputs:true)             , emit: contigs
-    tuple val(meta), path('*_1.fa*', includeInputs:true)              , emit: fastq1
-    tuple val(meta), path('*_2.fa*', includeInputs:true)              , emit: fastq2
+    path("config.txt")                                                , emit: config //Config file to run NOVOPlasty
+    tuple val(meta), path('*.fa', includeInputs:true)             , emit: fasta
+    tuple val(meta), path('*_1.fastq*', includeInputs:true)              , emit: fastq1
+    tuple val(meta), path('*_2.fastq*', includeInputs:true)              , emit: fastq2
 
     when:
     task.ext.when == null || task.ext.when
 
-
     script:
-    //def params = file(out.log.novoplasty).eachLine{ str -> printlc "line ${genomerange}: $str}
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
 
     """
 echo "
 Project:
 -----------------------
-Project name          = ${prefix}_polish
+Project name          = ${prefix}
 Type                  = mito
 Genome Range          = 13000-18000
 K-mer                 = 33
 Max memory            = 120
 Extended log          = 0
 Save assembled reads  = no
-Seed Input            = $seed
-Extend seed directly  = yes
-Reference sequence    =
+Seed Input            = $mtdna
+Extend seed directly  = no
+Reference sequence    = $mtdna
 Variance detection    =
 Chloroplast sequence  =
 
@@ -54,15 +51,15 @@ Store Hash            =
 
 Heteroplasmy:
 -----------------------
-MAF                   =
+MAF                   = 0.006
 HP exclude list       =
-PCR-free              =
+PCR-free              = yes
 
 Optional:
 -----------------------
 Insert size auto      = yes
 Use Quality Scores    = no
-Reduce ambigious N's  = yes
+Reduce ambigious N's  =
 Output path           =
 " > config.txt
     """

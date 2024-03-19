@@ -1,4 +1,5 @@
 process NOVOPLASTYSET {
+    fair true
     label 'process_single'
 
     output:

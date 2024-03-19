@@ -73,35 +73,30 @@ workflow MITOMINE {
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
 
-    INPUT_CHECK (
+    if (params.skip_assembly) {
+    ch_reads = Channel.empty()
+
+    ASSEMBLY( ch_reads )
+
+    } else {
+            INPUT_CHECK (
         file(params.input)
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
     ch_reads = INPUT_CHECK.out.reads
 
-    //
-    // MODULE: ASSEMBLY - DE NOVO mitogenome assembly
-    //
-
-    //NOVOPLASTY / MITOZ
-
-    //NOVOPLASTY (
-    //    ch_reads
-    //)
-
-    ASSEMBLY (
+        ASSEMBLY (
         ch_reads
     )
 
-    //MITOZ
+    }
+    //
+    // SUBWORKFLOW: ASSEMBLY - De Novo Mitogenome Assembly
+    //
 
-    //MITOZ_ASSEMBLER (
-    //    ch_reads
-    //)
 
-    //GETORGANELE
 
-    //GETORGANELE (ch_reads)
+    // Gene Shift
 
     //
     // MODULE: Syteny and collinear
@@ -111,6 +106,7 @@ workflow MITOMINE {
     //
     // Tree
     //
+
     //iqtree
 
     //
